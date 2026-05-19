@@ -22,7 +22,7 @@
     --panel:#16161d;
     --panel2:#1e1f28;
     --accent:#5c0000;
-    --accent2:#5c0000;
+    --accent2:var(--accent);
     --text:#f2f2f2;
     --muted:#b5b5b5;
     --border:#343447;
@@ -39,6 +39,22 @@ body{
     color:var(--text);
     font-family:'Inter', sans-serif;
     overflow-x:hidden;
+}
+
+.banner h1 {
+    font-size: 54px;
+    letter-spacing: 2px;
+    text-shadow: 0 0 18px rgba(92,0,0,0.4);
+}
+
+.banner {
+    border-bottom: 1px solid rgba(92,0,0,0.25);
+}
+
+.banner p {
+    color: var(--muted);
+    letter-spacing: 2px;
+    margin-top: 10px;
 }
 
 /* ===================================
@@ -251,22 +267,16 @@ h2{
     color:var(--accent2);
 }
 
-.card{
-    background:rgba(22,22,29,0.92);
+.card {
+    transition: 0.25s ease;
+    margin-bottom: 35px;
+}
 
-    border:1px solid var(--border);
-
-    border-radius:20px;
-
-    padding:30px;
-
-    margin-bottom:25px;
-
+.card:hover {
+    transform: translateY(-4px);
     box-shadow:
-        0 0 25px rgba(0,0,0,0.45),
-        0 0 12px rgba(139,47,255,0.08);
-
-    backdrop-filter:blur(6px);
+        0 0 30px rgba(92,0,0,0.2),
+        0 0 12px rgba(255,255,255,0.03);
 }
 
 .profile-grid{
@@ -390,6 +400,11 @@ ul{
 </style>
 </head>
 <body>
+
+    <div class="banner">
+    <h1>Allice Rose</h1>
+    <p>Reaper • Ex-Experiment • Wandering Shadow of Eorzea</p>
+    </div>
 
 <!-- MENU BUTTON -->
 
