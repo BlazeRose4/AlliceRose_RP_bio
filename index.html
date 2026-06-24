@@ -21,8 +21,9 @@
     --bg:#0b0b0f;
     --panel:#16161d;
     --panel2:#1e1f28;
-    --accent:#5c0000;
-    --accent2:var(--accent);
+    --accent:#5c0000;          /* Keeping your dark crimson for backgrounds & borders */
+    --accent-bright:#ff4d4d;   /* NEW: High-visibility scarlet red for text/headers */
+    --accent2:var(--accent-bright); /* Re-routing accent2 to our bright red */
     --text:#f2f2f2;
     --muted:#b5b5b5;
     --border:#343447;
@@ -62,6 +63,28 @@ body{
 }
 
 /* ===================================
+   MOUNTS LOG SYSTEM (SIDE-BY-SIDE)
+=================================== */
+
+/* This base rule is read by all screens sizes first */
+.mounts-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+}
+
+/* This forces desktops to break into columns immediately */
+@media screen and (min-width: 901px) {
+    .mounts-grid {
+        display: grid !important; /* !important guarantees the browser doesn't ignore it */
+        grid-template-columns: 1fr 1fr 1fr !important; /* Forces 3 explicit column panels */
+        gap: 25px !important;
+        align-items: start !important;
+    }
+}
+
+/* ===================================
    FC LINK BUTTON
 =================================== */
 
@@ -93,6 +116,86 @@ body{
 }
 
 /* ===================================
+   HOUSING CARD STYLING
+=================================== */
+
+.housing-card {
+    margin-top: 25px;
+    border-left: 4px solid var(--accent-bright) !important; /* Left glow anchor */
+}
+
+.housing-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.housing-header h3 {
+    color: var(--accent-bright);
+    font-family: 'Cinzel', serif;
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+    margin: 0;
+}
+
+.estate-tag {
+    background: rgba(255, 77, 77, 0.15);
+    color: var(--accent-bright);
+    padding: 3px 8px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    border-radius: 4px;
+    border: 1px solid rgba(255, 77, 77, 0.3);
+}
+
+.housing-details p {
+    margin-bottom: 8px;
+}
+
+.greeting-text {
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin-top: 12px;
+}
+
+/* Teleport Copy Button Base */
+.teleport-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    margin-top: 15px;
+    padding: 12px;
+    background: rgba(92, 0, 0, 0.2);
+    border: 1px solid rgba(255, 77, 77, 0.4);
+    color: var(--text);
+    font-family: 'Cinzel', serif;
+    font-weight: bold;
+    letter-spacing: 1px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.teleport-btn:hover {
+    background: rgba(255, 77, 77, 0.15);
+    border-color: var(--accent-bright);
+    box-shadow: 0 0 10px rgba(255, 77, 77, 0.2);
+}
+
+/* 🌟 Triggered via JavaScript when command copies successfully */
+.teleport-btn.copied {
+    background: #143314 !important; /* Premium UI victory green */
+    border-color: #2bef2b !important;
+    color: #cbffcb !important;
+}
+
+
+/* ===================================
    MENU BUTTON
 =================================== */
 
@@ -115,7 +218,8 @@ body{
 
     border:1px solid var(--border);
 
-    transition:0.25s;
+    /* 🌟 UPDATED: Added opacity fade smoothly */
+    transition: 0.25s, opacity 0.2s ease; 
 }
 
 .menu-btn:hover{
@@ -125,41 +229,52 @@ body{
 
 /* =========================
        SIDEBAR
-    ========================== */
+========================== */
 
-    .sidebar{
-        position:fixed;
-        top:0;
-        left:-260px;
-        width:260px;
-        height:100vh;
-        background:#1b1b1b;
-        border-right:2px solid #5c0000;
-        transition:0.35s ease;
-        z-index:1000;
-        padding-top:70px;
-    }
+.sidebar{
+    position:fixed;
+    top:0;
+    left:-260px;
+    width:260px;
+    height:100vh;
+    background:#1b1b1b;
+    border-right:2px solid #5c0000;
+    transition:0.35s ease;
+    z-index:1000;
+    padding-top:70px;
+}
 
-    .sidebar.active{
-        left:0;
-    }
+.sidebar.active{
+    left:0;
+}
 
-    .sidebar h2{
-        text-align:center;
-        margin-bottom:25px;
-        color:#5c0000;
-    }
+/* 🌟 ADDED: This rule automatically hides the menu button when sidebar has .active */
+.sidebar.active ~ .menu-btn {
+    opacity: 0;
+    pointer-events: none;
+}
 
+.sidebar h2{
+    text-align:center;
+    margin-bottom:25px;
+    color:var(--accent-bright);
+    text-shadow: 0 0 10px rgba(255, 77, 77, 0.3);
+}
 
+.banner h1 {
+    font-size: 54px;
+    letter-spacing: 2px;
+    color: var(--accent-bright);
+    text-shadow: 0 0 18px rgba(255,77,77,0.5);
+}
 
 /* ===================================
    SIDEBAR LINKS
 =================================== */
 
 .sidebar a{
-
     display:flex;
-    align-items:center;
+    align-items:center; /* 🌟 FIXED: Vertically centers text nicely with the icons */
     gap:16px;
 
     padding:16px 22px;
@@ -167,17 +282,14 @@ body{
     color:white;
     text-decoration:none;
 
-    border-bottom:1px solid rgba(92,0,0,1);
+    border-bottom:1px solid rgba(92,0,0,0.4); /* 🌟 UPDATED: Softened the hard line cut */
 
     transition:0.25s;
 }
 
 .sidebar a:hover{
-
-    background:rgba(92,0,0,0.15);
-
-    color:var(--accent2);
-
+    background:rgba(255, 77, 77, 0.08);
+    color:#ffffff;
     padding-left:30px;
 }
 
@@ -186,45 +298,133 @@ body{
 =================================== */
 
 .menu-icon-frame{
-
     width:52px;
     height:52px;
-
     min-width:52px;
-
     overflow:hidden;
-
     border-radius:14px;
-
     border:2px solid rgba(92,0,0,0.5);
-
     background:#111;
-
-    box-shadow:
-        0 0 10px rgba(92,0,0,0.25);
-
+    box-shadow: 0 0 10px rgba(92,0,0,0.25);
     transition:0.25s;
 }
 
 .menu-icon{
-
     width:100%;
     height:100%;
-
     object-fit:cover;
-
     display:block;
 }
 
 .sidebar a:hover .menu-icon-frame{
-
     transform:scale(1.08);
-
     border-color:var(--accent2);
-
-    box-shadow:
-        0 0 18px rgba(92,0,0,0.45);
+    box-shadow: 0 0 18px rgba(92,0,0,0.45);
 }
+/* =========================
+       SIDEBAR
+========================== */
+
+.sidebar{
+    position:fixed;
+    top:0;
+    left:-260px;
+    width:260px;
+    height:100vh;
+    background:#1b1b1b;
+    border-right:2px solid #5c0000;
+    transition:0.35s ease;
+    z-index:1000;
+    padding-top:70px;
+}
+
+.sidebar.active{
+    left:0;
+}
+
+/* This rule automatically hides the menu button when sidebar has .active */
+.sidebar.active ~ .menu-btn {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.sidebar h2{
+    text-align:center;
+    margin-bottom:25px;
+    color:var(--accent-bright);
+    text-shadow: 0 0 10px rgba(255, 77, 77, 0.3);
+}
+
+.banner h1 {
+    font-size: 54px;
+    letter-spacing: 2px;
+    color: var(--accent-bright);
+    text-shadow: 0 0 18px rgba(255,77,77,0.5);
+}
+
+/* ===================================
+   SIDEBAR LINKS
+=================================== */
+
+.sidebar a{
+    display:flex;
+    align-items:center; 
+    gap:16px;
+
+    padding:16px 22px;
+
+    color:white;
+    text-decoration:none;
+
+    border-bottom:1px solid rgba(92,0,0,0.4); 
+
+    transition:0.25s;
+}
+
+.sidebar a:hover{
+    background:rgba(255, 77, 77, 0.08);
+    color:#ffffff;
+    padding-left:30px;
+}
+
+/* 🌟 NEW: Persistent highlight for the active menu tab */
+.sidebar a.active {
+    background: rgba(255, 77, 77, 0.12); /* Slightly stronger red highlight than hover */
+    color: #ffffff;
+    border-left: 4px solid var(--accent-bright); /* Adds a sharp glowing left indicator bar */
+    padding-left: 18px; /* Balanced left spacing to offset the new left border */
+}
+
+/* ===================================
+   MENU ICONS
+=================================== */
+
+.menu-icon-frame{
+    width:52px;
+    height:52px;
+    min-width:52px;
+    overflow:hidden;
+    border-radius:14px;
+    border:2px solid rgba(92,0,0,0.5);
+    background:#111;
+    box-shadow: 0 0 10px rgba(92,0,0,0.25);
+    transition:0.25s;
+}
+
+.menu-icon{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+}
+
+.sidebar a:hover .menu-icon-frame,
+.sidebar a.active .menu-icon-frame { /* 🌟 NEW: Keeps the frame glowing on the active page */
+    transform:scale(1.08);
+    border-color:var(--accent2);
+    box-shadow: 0 0 18px rgba(92,0,0,0.45);
+}
+
 
 /* ===================================
    CONTENT
@@ -260,21 +460,29 @@ h1{
     font-family:'Cinzel', serif;
     font-size:42px;
     margin-bottom:25px;
-    color:var(--accent2);
-
-    text-shadow:0 0 12px rgba(198,140,255,0.35);
+    color:var(--accent-bright); /* High contrast vibrant red */
+    text-shadow: 0 0 14px rgba(255, 77, 77, 0.4); /* Clean voidsent ambient glow */
 }
 
 h2{
     font-family:'Cinzel', serif;
     margin-bottom:12px;
-    color:var(--accent2);
+    color:var(--accent-bright); /* High contrast vibrant red */
+    text-shadow: 0 0 10px rgba(255, 77, 77, 0.3);
 }
 
 .card {
+    background: var(--panel);
+    padding: 24px;
+    border-radius: 12px;
+    
+    /* 🌟 CHANGE THIS LINE: Uses your slate border variable so the box stays visible at rest */
+    border: 1px solid var(--border); 
+    
     transition: 0.25s ease;
     margin-bottom: 35px;
 }
+
 
 .card:hover {
     transform: translateY(-4px);
@@ -282,6 +490,7 @@ h2{
         0 0 30px rgba(92,0,0,0.2),
         0 0 12px rgba(255,255,255,0.03);
 }
+
 
 .profile-grid{
     display:grid;
@@ -319,19 +528,21 @@ h2{
     margin-top:20px;
 }
 
-.info-list li{
+.info-list li {
     margin-bottom:12px;
-    color:var(--muted);
+    color:#e0e0e0; /* Boosts contrast slightly from the original muted color */
 }
 
 .info-list strong{
     color:white;
 }
 
-p{
+p {
     line-height:1.8;
     color:#dddddd;
+    margin-bottom:1.2rem; /* Adds necessary breathing room between paragraphs */
 }
+
 
 .section-title{
     margin-bottom:20px;
@@ -382,6 +593,24 @@ ul{
     box-shadow:0 0 14px rgba(92,0,0,0.4);
 }
 
+/* Base style for mobile views (stacked layout) */
+.gear-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Desktop style (side-by-side layout) */
+@media (min-width: 900px) {
+    .gear-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr; /* Puts the two gear cards side-by-side */
+        gap: 30px;
+        align-items: start;
+    }
+}
+
+
 /* ===================================
    MOBILE
 =================================== */
@@ -406,467 +635,327 @@ ul{
 <body>
 
     <div class="banner">
-    <h1>Allice Rose</h1>
-    <p>Reaper • Ex-Experiment • Wandering Shadow of Eorzea</p>
+        <h1>Allice Rose</h1>
+        <p>Reaper • Ex-Experiment • Wandering Shadow of Eorzea</p>
     </div>
 
-<!-- MENU BUTTON -->
-
-<button class="menu-btn" onclick="toggleMenu()">
-☰ Menu
-</button>
-
-<!-- SIDEBAR -->
-
+   <!-- SIDEBAR FIRST -->
 <div class="sidebar" id="sidebar">
-
     <h2>ALLICE ROSE</h2>
-
-    <a href="#" onclick="showPage('home')">
-
+    
+    <!-- 🌟 UPDATED: Added class="active" so the Bio tab starts highlighted by default -->
+    <a href="#" onclick="showPage(event, 'home')" class="active">
         <div class="menu-icon-frame">
-            <img
-                class="menu-icon"
-                src="https://user.uploads.dev/file/5e3fa9dc0746935b465349bbb21141ea.png"
-                alt="Character Bio Icon"
-            >
+            <img class="menu-icon" src="https://user.uploads.dev/file/5e3fa9dc0746935b465349bbb21141ea.png" alt="Character Bio Icon">
         </div>
-
         <span>Character Bio</span>
-
     </a>
-
-    <a href="#" onclick="showPage('gear')">
-
+    
+    <a href="#" onclick="showPage(event, 'gear')">
         <div class="menu-icon-frame">
-            <img
-                class="menu-icon"
-                src="https://user.uploads.dev/file/c1dc96ad3867cd8fd294ac5e4ca45905.png"
-                alt="Gear Icon"
-            >
+            <img class="menu-icon" src="https://user.uploads.dev/file/c1dc96ad3867cd8fd294ac5e4ca45905.png" alt="Gear Icon">
         </div>
-
         <span>Gear</span>
-
     </a>
-
-    <a href="#" onclick="showPage('minions')">
-
+    
+    <a href="#" onclick="showPage(event, 'minions')">
         <div class="menu-icon-frame">
-            <img
-                class="menu-icon"
-                src="https://user.uploads.dev/file/745229b23ebb4d37fe558dc81cf1eb5a.png"
-                alt="Minion Icon"
-            >
+            <img class="menu-icon" src="https://user.uploads.dev/file/745229b23ebb4d37fe558dc81cf1eb5a.png" alt="Minion Icon">
         </div>
-
         <span>Minions</span>
-
     </a>
-
-    <a href="#" onclick="showPage('mounts')">
-
+    
+    <a href="#" onclick="showPage(event, 'mounts')">
         <div class="menu-icon-frame">
-            <img
-                class="menu-icon"
-                src="https://user.uploads.dev/file/e28b5591d41d2e0e9880572f1180925d.png"
-                alt="Mount Icon"
-            >
+            <img class="menu-icon" src="https://user.uploads.dev/file/e28b5591d41d2e0e9880572f1180925d.png" alt="Mount Icon">
         </div>
-
         <span>Mounts</span>
-
     </a>
-
-    <a href="#" onclick="showPage('fc')">
-
+    
+    <a href="#" onclick="showPage(event, 'fc')">
         <div class="menu-icon-frame">
-            <img
-                class="menu-icon"
-                src="https://user.uploads.dev/file/2cb89fc556ef2411337cc41480b89592.png"
-                alt="FC Icon"
-            >
+            <img class="menu-icon" src="https://user.uploads.dev/file/2cb89fc556ef2411337cc41480b89592.png" alt="FC Icon">
         </div>
-
         <span>Free Company</span>
-
     </a>
-
 </div>
 
-<!-- MAIN CONTENT -->
 
-<div class="content">
+<!-- MENU BUTTON SECOND -->
+<button class="menu-btn" onclick="toggleMenu()">
+    ☰ Menu
+</button>
 
-    <!-- ===================================
-         CHARACTER PAGE
-    ==================================== -->
 
-    <section id="home" class="page active">
 
-        <h1>Allice Rose</h1>
+    <!-- MAIN CONTENT -->
+    <div class="content">
 
-        <div class="card profile-grid">
+        <!-- ===================================
+             CHARACTER PAGE
+        ==================================== -->
+        <section id="home" class="page active">
+            <!-- <h1>Allice Rose</h1> Removed redundant h1 to avoid duplicate titles -->
 
-            <img
-                class="character-image"
-                src="https://user.uploads.dev/file/8d44b4fcc19b8cbcf372a5a68ae7908e.png"
-                alt="Allice Rose"
-            >
+            <div class="card profile-grid">
+                <img class="character-image" src="https://user.uploads.dev/file/8d44b4fcc19b8cbcf372a5a68ae7908e.png" alt="Allice Rose">
+                
+                <div>
+                    <h2>Character Information</h2>
+                    <ul class="info-list">
+                        <li><strong>Race:</strong> Miqo'te — Keeper of the Moon</li>
+                        <li><strong>Gender:</strong> Female</li>
+                        <li>
+                            <strong>Main Job:</strong> Reaper
+                            <img class="job-icon" src="https://user.uploads.dev/file/29990aa98e0e3ace34805d95f60cc713.png" alt="Reaper Icon">
+                        </li>
+                        <li>
+                            <strong>Sub Job:</strong> Gunbreaker
+                            <img class="job-icon" src="https://user.uploads.dev/file/03d2c03f5886b748b4fe604161a549dd.png" alt="Gunbreaker Icon">
+                        </li>
+                        <li><strong>Age:</strong> 29</li>
+                        <li><strong>Home Town:</strong> Bittermill</li>
+                        <li><strong>Alignment:</strong> True Neutral</li>
+                    </ul>
 
-            <div>
-
-                <h2>Character Information</h2>
-
-                <ul class="info-list">
-                    <li><strong>Race:</strong> Miqo'te — Keeper of the Moon</li>
-                    <li><strong>Gender:</strong> Female</li>
-                    <li>
-                        <strong>Main Job:</strong>
-                        Reaper
-                        <img class="job-icon" src="https://user.uploads.dev/file/29990aa98e0e3ace34805d95f60cc713.png" alt="Reaper Icon">
-                    </li>
-                    <li>
-                        <strong>Sub Job:</strong>
-                        Gunbreaker
-                        <img class="job-icon" src="https://user.uploads.dev/file/03d2c03f5886b748b4fe604161a549dd.png" alt="Gunbreaker Icon">
-                    </li>
-                    <li><strong>Age:</strong> 29</li>
-                    <li><strong>Home Town:</strong> Bittermill</li>
-                    <li><strong>Alignment:</strong> True Neutral</li>
-                </ul>
-
-                <div class="quote">
-                    “The forest teaches balance. The void teaches consequence.”
-                </div>
-
+                    <div class="quote">
+                        “The forest teaches balance. The void teaches consequence.”
+                    </div>
+                </div> <!-- FIXED: Added missing closing div tag for profile grid content -->
             </div>
 
-        </div>
+            <div class="card">
+                <h2 class="section-title">Backstory</h2>
+                <!-- FIXED: Removed messy <br> lines to let CSS paragraph margins style cleanly -->
+                <p>
+                    Born to the Roaming Roses, a nomadic Gridanian trade guild,
+                    Allice’s early years were filled with music, laughter,
+                    and the scent of caravan spice. Her parents —
+                    Summer Rose and Qrow Rose-Branwen —
+                    taught her to barter, to read the wind,
+                    and to respect the balance of the forest.
+                </p>
+                <p>
+                    When the Garleans came, all of that was stolen.
+                    At twelve, she was taken to a research facility
+                    in the occupied lands of Ala Mhigo.
+                    There, she was one of many subjected to void infusion trials,
+                    forced to bond with a lesser voidsent
+                    as part of a secret Reaper program.
+                    Few survived.
+                </p>
+                <p>
+                    She did — but not unchanged.
+                </p>
+                <p>
+                    By twenty, hardened by years of servitude and covert missions,
+                    she escaped under the cover of chaos,
+                    her voidsent’s power turning against her captors.
+                    Her return to Bittermill brought only ruin;
+                    her home was nothing but ashes and silence.
+                </p>
+                <p>
+                    For years she drifted through the shadows of Eorzea —
+                    a mercenary, hunter, and avenger —
+                    her scythe both weapon and curse.
+                </p>
+                <p>
+                    Recently, she found refuge among the Scholars Rest Free Company,
+                    where for the first time,
+                    she fights not for orders or coin,
+                    but for companionship and cause.
+                </p>
+            </div>
 
+            <div class="card">
+                <h2 class="section-title">Personality & Habits</h2>
+                <ul>
+                    <li>
+                        <strong>Speech:</strong> Calm, measured, low-toned. Uses few words, but each chosen precisely.
+                    </li>
+                    <li>
+                        <strong>Demeanor:</strong> Reserved in public, protective in private circles.
+                    </li>
+                    <li>
+                        Rarely raises her voice unless angered.
+                    </li>
+                    <li>
+                        Sleeps lightly and keeps weapons within reach.
+                    </li>
+                    <li>
+                        Strong dislike for Garlean experimentation and magitek prisons.
+                    </li>
+                    <li>
+                        Tends to linger at the edge of crowded rooms.
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+
+    <!-- ===================================
+         GEAR PAGE
+    ==================================== -->
+    <section id="gear" class="page">
+
+    <h1>Gear & Glamour</h1>
+
+    <div class="gear-grid"> <!-- 🌟 ADDED WRAPPER -->
+
+        <!-- MAIN REAPER SET -->
         <div class="card">
-
-            <h2 class="section-title">Backstory</h2>
-
-            <p>
-                Born to the Roaming Roses, a nomadic Gridanian trade guild,
-                Allice’s early years were filled with music, laughter,
-                and the scent of caravan spice. Her parents —
-                Summer Rose and Qrow Rose-Branwen —
-                taught her to barter, to read the wind,
-                and to respect the balance of the forest.
-            </p>
-
-            <br>
-
-            <p>
-                When the Garleans came, all of that was stolen.
-                At twelve, she was taken to a research facility
-                in the occupied lands of Ala Mhigo.
-                There, she was one of many subjected to void infusion trials,
-                forced to bond with a lesser voidsent
-                as part of a secret Reaper program.
-                Few survived.
-            </p>
-
-            <br>
-
-            <p>
-                She did — but not unchanged.
-            </p>
-
-            <br>
-
-            <p>
-                By twenty, hardened by years of servitude and covert missions,
-                she escaped under the cover of chaos,
-                her voidsent’s power turning against her captors.
-                Her return to Bittermill brought only ruin;
-                her home was nothing but ashes and silence.
-            </p>
-
-            <br>
-
-            <p>
-                For years she drifted through the shadows of Eorzea —
-                a mercenary, hunter, and avenger —
-                her scythe both weapon and curse.
-            </p>
-
-            <br>
-
-            <p>
-                Recently, she found refuge among the Scholars Rest Free Company,
-                where for the first time,
-                she fights not for orders or coin,
-                but for companionship and cause.
-            </p>
-
-        </div>
-
-        <div class="card">
-
-            <h2 class="section-title">Personality & Habits</h2>
-
-            <ul>
-                <li>
-                    <strong>Speech:</strong>
-                    Calm, measured, low-toned.
-                    Uses few words, but each chosen precisely.
-                </li>
-
-                <li>
-                    <strong>Demeanor:</strong>
-                    Reserved in public,
-                    protective in private circles.
-                </li>
-
-                <li>
-                    Rarely raises her voice unless angered.
-                </li>
-
-                <li>
-                    Sleeps lightly and keeps weapons within reach.
-                </li>
-
-                <li>
-                    Strong dislike for Garlean experimentation and magitek prisons.
-                </li>
-
-                <li>
-                    Tends to linger at the edge of crowded rooms.
-                </li>
+            <h2 class="gear-title">
+                <img class="gear-icon" src="https://user.uploads.dev/file/29990aa98e0e3ace34805d95f60cc713.png" alt="Reaper Icon">
+                Main Gear & Glam — Reaper
+            </h2>
+            <ul class="gear-list">
+                <li><strong>Weapon:</strong> Phantom War Scythe Obscurum</li>
+                <li><strong>Head:</strong> Zero's Order Chapeau</li>
+                <li><strong>Body:</strong> Zero's Order Cuirass <em>(also covers hands)</em></li>
+                <li><strong>Legs:</strong> Zero's Order Flanchard <em>(also covers feet)</em></li>
             </ul>
+        </div>
 
+        <!-- GUNBREAKER SET -->
+        <div class="card">
+            <h2 class="gear-title">
+                <img class="gear-icon" src="https://user.uploads.dev/file/03d2c03f5886b748b4fe604161a549dd.png" alt="Gunbreaker Icon">
+                Sub Gear & Glam — Gunbreaker
+            </h2>
+            <ul class="gear-list">
+                <li><strong>Weapon:</strong> Phantom Gunblade Obscurum</li>
+                <li><strong>Head:</strong> The Warden's Wreath</li>
+                <li><strong>Body:</strong> The Warden's Dress</li>
+                <li><strong>Hands:</strong> The Warden's Vambraces</li>
+                <li><strong>Legs:</strong> The Warden's Tanga</li>
+                <li><strong>Feet:</strong> The Warden's Thighboots</li>
+            </ul>
+        </div>
+
+    </div> <!-- 🌟 CLOSED WRAPPER -->
+
+</section>
+
+
+
+       <!-- ===================================
+         MINIONS PAGE
+    ==================================== -->
+    <section id="minions" class="page">
+
+        <h1>Minions</h1>
+
+        <div class="card">
+            <h2>Cerby</h2>
+            
+            <p class="minion-desc">
+                A loyal Cerberpup companion rarely seen far from Allice’s side.
+                Despite its intimidating heritage, Cerby is surprisingly calm
+                around trusted allies and fiercely protective when danger nears.
+            </p>
+
+            <ul class="minion-specs">
+                <li><strong>Species:</strong> Cerberpup</li>
+                <li><strong>Name:</strong> Cerby</li>
+                <li><strong>Temperament:</strong> Protective / Loyal / Quiet</li>
+            </ul>
         </div>
 
     </section>
 
-    <!-- ===================================
-     GEAR PAGE
-==================================== -->
 
-<section id="gear" class="page">
-
-    <h1>Gear & Glamour</h1>
-
-    <!-- MAIN REAPER SET -->
-
-    <div class="card">
-
-        <h2 class="gear-title">
-            <img class="gear-icon" src="https://user.uploads.dev/file/29990aa98e0e3ace34805d95f60cc713.png" alt="Reaper Icon">
-            Main Gear & Glam — Reaper
-        </h2>
-
-        <br>
-
-        <ul>
-            <li>
-                <strong>Weapon:</strong>
-                Phantom War Scythe Obscurum
-            </li>
-
-            <li>
-                <strong>Head:</strong>
-                Zero's Order Chapeau
-            </li>
-
-            <li>
-                <strong>Body:</strong>
-                Zero's Order Cuirass
-                <em>(also covers hands)</em>
-            </li>
-
-            <li>
-                <strong>Legs:</strong>
-                Zero's Order Flanchard
-                <em>(also covers feet)</em>
-            </li>
-        </ul>
-
-    </div>
-
-    <!-- GUNBREAKER SET -->
-
-    <div class="card">
-
-        <h2 class="gear-title">
-            <img class="gear-icon" src="https://user.uploads.dev/file/03d2c03f5886b748b4fe604161a549dd.png" alt="Gunbreaker Icon">
-            Sub Gear & Glam — Gunbreaker
-        </h2>
-
-        <br>
-
-        <ul>
-
-            <li>
-                <strong>Weapon:</strong>
-                Phantom Gunblade Obscurum
-            </li>
-
-            <li>
-                <strong>Head:</strong>
-                The Warden's Wreath
-            </li>
-
-            <li>
-                <strong>Body:</strong>
-                The Warden's Dress
-            </li>
-
-            <li>
-                <strong>Hands:</strong>
-                The Warden's Vambraces
-            </li>
-
-            <li>
-                <strong>Legs:</strong>
-                The Warden's Tanga
-            </li>
-
-            <li>
-                <strong>Feet:</strong>
-                The Warden's Thighboots
-            </li>
-
-        </ul>
-
-    </div>
-
-</section>
-
-    <!-- ===================================
-     MINIONS PAGE
-==================================== -->
-
-<section id="minions" class="page">
-
-    <h1>Minions</h1>
-
-    <div class="card">
-
-        <h2>Cerby</h2>
-
-        <br>
-
-        <p>
-            A loyal Cerberpup companion rarely seen far from Allice’s side.
-            Despite its intimidating heritage, Cerby is surprisingly calm
-            around trusted allies and fiercely protective when danger nears.
-        </p>
-
-        <br>
-
-        <ul>
-            <li>
-                <strong>Species:</strong>
-                Cerberpup
-            </li>
-
-            <li>
-                <strong>Name:</strong>
-                Cerby
-            </li>
-
-            <li>
-                <strong>Temperament:</strong>
-                Protective / Loyal / Quiet
-            </li>
-        </ul>
-
-    </div>
-
-</section>
-
-    <!-- ===================================
-     MOUNTS PAGE
-==================================== -->
-
-<section id="mounts" class="page">
+        <!-- ===================================
+         MOUNTS PAGE
+    ==================================== -->
+   <section id="mounts" class="page">
 
     <h1>Mounts</h1>
 
-    <!-- FLYING -->
+    <div class="mounts-grid">
 
-    <div class="card">
+        <!-- FLYING MOUNTS COLUMN -->
+        <div class="card">
+            <h2>Flying Mounts</h2>
+            <ul>
+                <li>Ruby Lanner</li>
+            </ul>
+        </div>
 
-        <h2>Flying Mounts</h2>
+        <!-- LAND MOUNTS COLUMN -->
+        <div class="card">
+            <h2>Land Mounts</h2>
+            <ul>
+                <li>Hardy-Daytona</li>
+                <li>Regalia Type-G</li>
+                <li>Shadow Wolf</li>
+            </ul>
+        </div>
 
-        <br>
-
-        <ul>
-            <li>Ruby Lanner</li>
-        </ul>
-
-    </div>
-
-    <!-- LAND -->
-
-    <div class="card">
-
-        <h2>Land Mounts</h2>
-
-        <br>
-
-        <ul>
-            <li>Hardy-Daytona</li>
-            <li>Regalia Type-G</li>
-            <li>Shadow Wolf</li>
-        </ul>
-
-    </div>
-
-    <!-- SEA -->
-
-    <div class="card">
-
-        <h2>Sea Mounts</h2>
-
-        <br>
-
-        <ul>
-            <li>Petalodus</li>
-            <li>Eurekan Petrel</li>
-        </ul>
+        <!-- SEA MOUNTS COLUMN -->
+        <div class="card">
+            <h2>Sea Mounts</h2>
+            <ul>
+                <li>Petalodus</li>
+                <li>Eurekan Petrel</li>
+            </ul>
+        </div>
 
     </div>
 
 </section>
 
-    <!-- ===================================
-         FC PAGE
-    ==================================== -->
 
+
+
+            <!-- ===================================
+             FC PAGE
+        ==================================== -->
     <section id="fc" class="page">
+        
+        <h1>Free Company</h1>
 
         <div class="card">
+            <h2>Scholars Rest</h2>
 
-    <h2>Free Company</h2>
+            <p>
+                A welcoming Free Company built upon companionship,
+                learning, and mutual protection.
+                Scholars Rest serves as both sanctuary and family
+                to wandering souls across Eorzea.
+            </p>
 
-    <p>
-        A welcoming Free Company built upon companionship,
-        learning, and mutual protection.
-        Scholars Rest serves as both sanctuary and family
-        to wandering souls across Eorzea.
-    </p>
+            <ul>
+                <li><strong>Focus:</strong> Roleplay / PvE / Social Events</li>
+                <li><strong>Atmosphere:</strong> Relaxed & Story Driven</li>
+                <li><strong>Known For:</strong> Adventurer support and research</li>
+            </ul>
 
-    <br>
+            <!-- FC LINK BUTTON -->
+            <a class="fc-link" href="https://scholarsrest.carrd.co/" target="_blank" rel="noopener noreferrer">
+                Visit Scholars Rest FC Site
+            </a>
+        </div>
 
-    <ul>
-        <li><strong>Focus:</strong> Roleplay / PvE / Social Events</li>
-        <li><strong>Atmosphere:</strong> Relaxed & Story Driven</li>
-        <li><strong>Known For:</strong> Adventurer support and research</li>
-    </ul>
+        <!-- HOUSING LOCATION SECTION -->
+<div class="card housing-card">
+    <div class="housing-header">
+        <h3>FREE COMPANY ESTATE</h3>
+        <span class="estate-tag">L-Size</span>
+    </div>
+    
+    <div class="housing-details">
+        <p><strong>Location:</strong> Mist Overlook</p>
+        <p><strong>Address:</strong> Ward 10, Plot 45</p>
+        <p class="greeting-text"><em>“A quiet sanctuary overlooking the sea for researcher and wanderer alike.”</em></p>
+    </div>
 
-    <br>
-
-    <!-- FC LINK BUTTON -->
-    <a class="fc-link" href="https://scholarsrest.carrd.co/" target="_blank">
-        Visit Scholars Rest FC Site
-    </a>
-
+    <!-- Clickable Teleport Copy Button -->
+    <button class="teleport-btn" onclick="copyTeleportCommand(this)">
+        <span class="btn-icon">📋</span> COPY IN-GAME TELEPORT
+    </button>
 </div>
+
+    </section>
 
 <script>
 
@@ -876,20 +965,73 @@ function toggleMenu(){
     sidebar.classList.toggle("active");
 }
 
-function showPage(pageId){
+// Pass the 'event' item here to control the browser behavior
+function showPage(event, pageId){
+    // Prevents the browser from jumping to the top of the screen on link click
+    if(event) {
+        event.preventDefault(); 
+    }
 
+    // 1. Switch the main content pages
     const pages = document.querySelectorAll(".page");
-
     pages.forEach(page => {
         page.classList.remove("active");
     });
-
     document.getElementById(pageId).classList.add("active");
+
+    // 2. Clear old highlights and highlight the clicked menu link
+    const links = document.querySelectorAll(".sidebar a");
+    links.forEach(link => {
+        link.classList.remove("active");
+    });
+    
+    // Safety check to ensure an item was clicked before changing styles
+    if(event && event.currentTarget) {
+        event.currentTarget.classList.add("active");
+    }
 
     sidebar.classList.remove("active");
 }
 
+// Closes the sidebar smoothly if you click anywhere else on the screen
+window.addEventListener('click', function(event) {
+    const menuBtn = document.querySelector(".menu-btn");
+
+    // Only close if the sidebar is open, and the click was NOT on the sidebar or menu button
+    if (sidebar.classList.contains("active") && 
+        !sidebar.contains(event.target) && 
+        !menuBtn.contains(event.target)) {
+        
+        sidebar.classList.remove("active");
+    }
+});
+
+// 🌟 NEW: Copies the exact in-game estate teleport macro text string to keyboard clipboard
+function copyTeleportCommand(buttonElement) {
+    const commandText = "/housing teleport mist w10 p45";
+    
+    navigator.clipboard.writeText(commandText).then(() => {
+        // Cache original text layout to swap back later
+        const originalText = buttonElement.innerHTML;
+        
+        // Activate green victory state styling attributes
+        buttonElement.classList.add("copied");
+        buttonElement.innerHTML = "<span class='btn-icon'>✓</span> COMMAND COPIED!";
+        
+        // Automatically flip button back to standard layout after 2 seconds
+        setTimeout(() => {
+            buttonElement.classList.remove("copied");
+            buttonElement.innerHTML = originalText;
+        }, 2000);
+    }).catch(err => {
+        console.error("Failed to execute clipboard copies: ", err);
+    });
+}
+
 </script>
+
+
+
 
 </body>
 </html>
